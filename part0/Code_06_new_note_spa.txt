@@ -1,0 +1,14 @@
+title 06_new_note_spa
+
+Browser->Server:HTTP Get https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over Browser
+Content-type:application/json
+{"content": "Harish","date": "2022-07-21T05:08:01.349Z"
+}
+end note
+Server->Browser:201 created
+]
+note over Browser:
+browser executes the event handler 
+that renders the notes to display
+end note

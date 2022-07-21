@@ -1,0 +1,16 @@
+title 04_new_note
+
+Browser->Server:HTTP Get https://studies.cs.helsinki.fi/exampleapp/notes
+Server->Browser:HTML-code
+Browser->Server:HTTP Get https://studies.cs.helsinki.fi/exampleapp/main.css
+Server->Browser:main.css
+Browser->Server:HTTP Get https://studies.cs.helsinki.fi/exampleapp/main.js
+Server->Browser:main.js
+note over Browser:
+browser starts executing main.js
+that request JSON data from server
+end note
+Browser->Server:HTTP Get https://studies.cs.helsinki.fi/exampleapp/data.json
+Server->Browser:[{"content":"","date":"2022-07-20T21:00:02.369Z"},...]
+note over Browser:
+browser executes the event handler that renders the notes to display
