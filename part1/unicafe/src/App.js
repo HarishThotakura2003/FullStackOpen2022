@@ -30,7 +30,7 @@ const Statistics = ({good,neutral,bad}) =>{
           <StatisticsLine text="bad" value={bad} />
           <StatisticsLine text="all" value={good+neutral+bad} />
           <StatisticsLine text="average" value={(good-bad)/(good+bad+neutral)} />
-          <StatisticsLine text="positve" value={good/(good+bad+neutral)} />
+          <StatisticsLine text="positve" value={(good/(good+bad+neutral))+" %"} />
         </table>
       </>
     )
