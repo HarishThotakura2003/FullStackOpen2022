@@ -1,5 +1,43 @@
 import { useState } from 'react'
 
+const Header =({text})=>{
+  return(
+    <h1>{text}</h1>
+  )
+}
+
+const Winner =({anecdotes,allVotes})=>{
+  const highest = Math.max(...allVotes)
+  const index=allVotes.indexOf(highest)
+  const winner = anecdotes[index]
+  if(highest==0){return <p>No Votes Yet</p>}
+  else{
+    return (
+      <>
+        <p>{winner}</p>
+        <p>has{highest}</p>
+      </>
+    )
+  }
+}
+
+const Button = ({text,onClick}) =>{
+  return(
+    <>
+    <button onClick={onClick}>{text}</button>
+    </>
+  )
+}
+
+const Anecdote =({text,votes})=>{
+  return(
+    <>
+    <p>{text}</p>
+    <p>has {votes} votes</p>
+    </>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -26,12 +64,14 @@ const App = () => {
 
 
   return (
-    <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {allVotes[selected]} votes</p>
-      <button onClick={handleVoteClick}>votes</button>
-      <button onClick={handleAnecdoteClick}>next anecdote</button>
-    </div>
+    <>
+      <Header text="Anecdote of the day" />
+      <Anecdote text={anecdotes[selected]} votes ={allVotes[selected]} />
+      <Button text="vote" onClick={handleVoteClick} />
+      <Button text= "next anecdote" onClick={handleAnecdoteClick}></Button>
+      <Header text="Anecdote with the most votes" />
+      <Winner anecdotes={anecdotes} allVotes={allVotes} />
+    </>
   )
 }
 
