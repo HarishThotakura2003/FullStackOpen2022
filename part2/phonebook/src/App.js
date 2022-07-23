@@ -44,7 +44,11 @@ const App = () => {
     const newNumber={
       name:input
     }
-    setPersons(persons.concat(newNumber))
+    if(persons.some(person => person.name === newNumber.name)){
+      alert(`${newNumber.name} is already added to phonebook`)
+    }
+    else{setPersons(persons.concat(newNumber))}
+    
     
   }
 
