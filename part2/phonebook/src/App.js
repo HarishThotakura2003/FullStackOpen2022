@@ -1,15 +1,15 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
+import axios from 'axios';
 
 import Form from './components/Form'
 import Header from './components/Header'
 import Content from './components/Content'
 import Filter from './components/Filter'
 
-import Json from './Json'
 
 const App = () => {
-  const [allPersons,setAllPersons] = useState(Json)
-  const [displayPersons,setDisplayPersons] = useState(Json)
+  const [allPersons,setAllPersons] = useState([])
+  const [displayPersons,setDisplayPersons] = useState([])
   
   const [name,setName] = useState('')
   const [number,setNumber] = useState('')
@@ -17,6 +17,16 @@ const App = () => {
   
   const handleNameChange = (e) => {setName(e.target.value);}
   const handleNumberChange = (e) => {setNumber(e.target.value);}
+  const address ="http://localhost:3001/persons"
+
+  const hook =() =>{
+    axios.get(address).then((res)=>{
+      setDisplayPersons(res.data)
+      setAllPersons(res.data)
+    })
+  }
+  useEffect(hook,[])
+
 
   const onSubmit = async (e) => {
     e.preventDefault();
