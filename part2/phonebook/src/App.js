@@ -1,70 +1,60 @@
 import React,{useState} from 'react'
 
-const Header =({text}) =>{
-  return(
-    <h2>{text}</h2>
-  )
-}
+import Form from './components/Form'
+import Header from './components/Header'
+import Content from './components/Content'
+import Filter from './components/Filter'
 
-const Person =({name,number})=>{
-  return(
-    <>
-    <p>{name}: {number}</p>
-    </>
-  )
-}
-
-const Form = ({onSubmit,name,number}) =>{
-  return(
-    <>
-    <form onSubmit={onSubmit}>
-    <div>
-        name: <input onChange={name}/>
-      </div>
-      <div>
-        number: <input onChange={number}/>
-      </div>
-      <div>
-        <button type='submit'>add</button>
-      </div>
-    </form>
-    </>
-  )
-}
+import Json from './Json'
 
 const App = () => {
-  const [persons,setPersons] = useState(
-    [{name:'Arto Hellas ',number:'040-1234567'}]
-    )
-
+  const [allPersons,setAllPersons] = useState(Json)
+  const [displayPersons,setDisplayPersons] = useState(Json)
+  
   const [name,setName] = useState('')
   const [number,setNumber] = useState('')
+  const [filter,setFilter] = useState('')
+  
   const handleNameChange = (e) => {setName(e.target.value);}
   const handleNumberChange = (e) => {setNumber(e.target.value);}
 
-  const submit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+    console.log(e.target);
     const n = {
       name:name,
       number:number,
+      id:allPersons.length+1
     }
-    if (persons.some(person=>person.name==n.name)){
+    if (allPersons.some(person=>person.name==n.name)){
       alert(`${n.name} is already added to phonebook`)
+      setName('')
+      setNumber('')
+      await setDisplayPersons(allPersons)
     }
     else{
-      setPersons(persons.concat(n))
+      await setDisplayPersons(allPersons.concat(n))
+      setAllPersons(allPersons.concat(n))
       setName('')
       setNumber('')
     }
   }
   
+  const handleFilterChange =(e) => {
+    setFilter(e.target.value)
+    const regex = new RegExp(filter,'i');
+    const filteredPersons = allPersons.filter((person=>person.name.match(regex)));
+    setDisplayPersons(filteredPersons)
+  }
 
   return (
     <div>
       <Header text="Phonebook" />
-      <Form onSubmit={submit} name={handleNameChange} number={handleNumberChange}/>
+      <Filter onChange={handleFilterChange}/>
+      <Header text="add a new " />
+      <Form onSubmit={onSubmit} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} name={name} number={number}/>
       <Header text="Numbers" />
-      {persons.map(person=><Person name={person.name} number={person.number}/>)}
+      <Content displayPersons={displayPersons} />
     </div>
   )
 }
