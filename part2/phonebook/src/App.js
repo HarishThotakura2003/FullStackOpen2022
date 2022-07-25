@@ -44,6 +44,10 @@ const App = () => {
     }
     else{
       await setDisplayPersons(allPersons.concat(n))
+      axios.post('http://localhost:3001/persons',n)
+           .then(response=>{
+            console.log(response)
+           })
       setAllPersons(allPersons.concat(n))
       setName('')
       setNumber('')
