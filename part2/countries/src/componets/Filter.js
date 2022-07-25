@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Filter = ({onChange,value}) => {
+const Filter = ({onChange}) => {
   return (
-    <div>find countries<input onChange={onChange} value={value}/></div>
+    <div>find countries<input onChange={onChange}/></div>
   )
 }
 

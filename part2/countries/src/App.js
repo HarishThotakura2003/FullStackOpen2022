@@ -4,20 +4,17 @@ import Filter from './componets/Filter'
 import Content from './componets/Content'
 
 const App = () => {
-  const [query,setQuery] = useState('')
   const [countries,setCountries] = useState([])
 
-  const queryChange = (e) => {
+  const onQueryChange = (e) => {
     axios.get("https://restcountries.com/v3.1/name/"+e.target.value)
          .then((res)=>{setCountries(res.data)})
-    setQuery(e.target.value)
-    
-    console.log(countries)
+    console.log("hello world")
   };
 
   return (
     <div>
-      <Filter onChange={queryChange} value={query}/>
+      <Filter onChange={onQueryChange}/>
       <Content countries={countries} />
     </div>
   )
