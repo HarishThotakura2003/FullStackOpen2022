@@ -9,7 +9,6 @@ const App = () => {
   const onQueryChange = (e) => {
     axios.get("https://restcountries.com/v3.1/name/"+e.target.value)
          .then((res)=>{setCountries(res.data)})
-    console.log("hello world")
   };
 
   return (

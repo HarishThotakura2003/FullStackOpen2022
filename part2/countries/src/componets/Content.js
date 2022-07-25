@@ -13,7 +13,7 @@ const Content =({countries}) =>{
             return(
                 <>
                     <ul>
-                        {countries.map(country=><li>{country.name.common} <button onClick={()=>setDisplay(country)}>show</button></li>)}
+                        {countries.map((country,i)=><li key={i}>{country.name.common} <button onClick={()=>setDisplay(country)}>show</button></li>)}
                     </ul>
                 </>
             )
@@ -22,7 +22,7 @@ const Content =({countries}) =>{
         return(
             <>
                 <ul>
-                    {countries.map(country=><li>{country.name.common} <button onClick={()=>setDisplay(country)}>show</button></li>)}
+                    {countries.map((country,i)=><li key={i}>{country.name.common} <button onClick={()=>setDisplay(country)}>show</button></li>)}
                 </ul>
                 <Country country={display} />
             </>
