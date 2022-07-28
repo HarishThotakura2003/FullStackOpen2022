@@ -6,16 +6,18 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "build:ui":"rm -rf build && cd ../../part2/phonebook && npm run build && cp -r build ../../part3/phonebook",
-    "deploy":"git push heroku master",
-    "deploy:full":"npm run build:ui && git add . && git commit -m uibuild && npm run deploy"
+    "build:ui": "rm -rf build && cd ../../part2/phonebook && npm run build && cp -r build ../../part3/phonebook",
+    "deploy": "git push heroku master",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "mongoose": "^6.5.0",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
