@@ -1,7 +1,10 @@
 const { response, request } = require('express')
 const express = require('express')
+const mongoose = require('mongoose')
 const morgan = require('morgan')
 const cors = require('cors')
+const Contact = require('./models/Contact')
+
 const app = express()
 
 app.use(cors())
@@ -10,68 +13,75 @@ app.use(morgan('tiny'))
 app.use(express.static('build'))
 
 const PORT = process.env.PORT || 3001
-const baseUrl = 'http://localhost:3001/api/persons'
-let Contacts = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-const infoResponse =`<p>Phonebook has info for ${Contacts.length} people</p><p>${new Date().toGMTString()}</p>`
-const contactFetchId = (id) =>{
-  return Contacts.find(contact=>contact.id === id)
-}
-const contactFetchName = (name) =>{
-  return Contacts.find(contact=>contact.name === name)
+
+const errorHandler = (error,request,response,next) => {
+  console.log(error)
+  next(error)
 }
 
-const generateId = () =>{
-  const max = Contacts.length>0 ? Math.max(...Contacts.map(c=>c.id)):0
-  return max +1
+const unknownEndpoint = (req, res, next) => {
+  res.status(404).send({error: 'Unknown endpoint'})
 }
+
 
 app.get("/api/persons",(req,res)=>{
-  res.json(Contacts).end()
+  console.log("hello world")
+  Contact.find({})
+        .then(contacts=>{
+    res.json(contacts)
+  })
+  .catch(error=>next(error))
 })
 
 app.post('/api/persons',(req,res)=>{
   const body = req.body
-  const name = body.name
-  const number = body.number
-  console.log(body)
-  console.log(number)
-  if(!name||!number){return res.status(400).json({error:"content missing"})}
-  if(contactFetchName(name)){return res.status(409).json({error:"name must be unique"})}
-  const n ={name,number,id:generateId()}
-  Contacts=Contacts.concat(n)
-  res.json(Contacts)
+  if(body.contents==undefined){return res.status(400)}
+  
+  const contact = new Contact({
+    name:body.name,
+    number:Number(body.number),
+  })
+
+  contact.save()
+          .then(contact=>res.json(contact))
+          .catch(error=>next(error))
 })
 
-app.get("/api/persons/:id",(req,res)=>{
-  const id = Number(req.params.id)
-  const response =Contacts.find(contact=>contact.id === id)
-  if(response){res.json(response)}
-  else{res.status(404).end()}
+app.delete('/api/persons/:id',(req,res,next)=>{
+  Contact.findByIdAndDelete(req.params.id)
+        .then(result=>{
+          console.log(result)
+          res.status(204).end()
+        })
+        .catch(error=>next(error))
 })
 
-app.get("/info",(req,res)=>{
-  res.send(infoResponse)
+app.put('/api/persons/:id',(req,res,next)=>{
+  
+  const contact ={
+    name:req.body.name,
+    number:req.body.number
+  }
+
+  Contact.findByIdAndUpdate(req.params.id,contact,{new:true})
+        .then(result=>{
+          res.json(result)
+        })
+        .catch(error=>next(error))
 })
+
+app.get('/api/persons/:id',(req,res,next)=>{
+
+  Contact.findById(req.params.id)
+        .then(result=>{
+          console.log(result)
+          res.json(result)
+        })
+        .catch(error=>next(error))
+})
+
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 app.listen(PORT)
