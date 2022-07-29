@@ -9,22 +9,15 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
-app.use(morgan((tokens, req, res) => {
-  return [
-    tokens.method(req, res),
-    tokens.url(req, res),
-    tokens.status(req, res),
-    tokens.res(req, res, 'content-length'), '-',
-    tokens['response-time'](req, res), 'ms',
-    JSON.stringify(req.body)
-  ].join(' ')
-}))
+app.use(morgan('tiny'))
 app.use(express.static('build'))
 
 const PORT = process.env.PORT || 3001
 
 const errorHandler = (error,request,response,next) => {
-  console.log(error)
+  if(error.name==='ValidationError') {
+    return response.status(400).json({error: error.message})
+  }
   next(error)
 }
 
@@ -72,7 +65,7 @@ app.put('/api/persons/:id',(req,res,next)=>{
     number:req.body.number
   }
 
-  Contact.findByIdAndUpdate(req.params.id,contact,{new:true})
+  Contact.findByIdAndUpdate(req.params.id,contact,{new:true,runValidators:true,context:'query'})
         .then(result=>{
           res.json(result)
         })

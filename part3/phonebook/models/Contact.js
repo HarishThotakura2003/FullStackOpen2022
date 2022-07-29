@@ -10,8 +10,17 @@ mongoose.connect(process.env.MONGO_URI)
         })
 
 const ContactScheme = new mongoose.Schema({
-    name: String,
-    number: Number,
+    name: {
+        type: String,
+        required: [true,"Name required"],
+        unique: true,
+        minLength: [3,"must have at least 3 characters"],
+    },
+    number:{
+        type: Number,
+        required: [true,"numer required"],
+        minlength: [8,'Number must have atleast 8 characters']
+    }
 })
 
 module.exports = mongoose.model('Contact', ContactScheme)
