@@ -1,62 +1,43 @@
 import React from 'react'
 
-const Header = ({course}) =>{
-  return(
+const Header = (props) => {
+  return (
+    <><h1>{props.course}</h1></>
+  )
+  
+}
+
+const Content =(props) => {
+  
+  return (
     <>
-    <h1>{course.name}</h1>
+    <p>{props.p1} {props.e1}</p>
+    <p>{props.p2} {props.e2}</p>
+    <p>{props.p3} {props.e3}</p>
     </>
   )
 }
 
-const Part =(props) =>{
-  return(
-    <>
-    <p>{props.part} {props.exercises}</p>
-    </>
+const Total = (props) =>{
+  return (
+    <><p>Number of exercises {props.e1+props.e2+props.e3}</p></>
   )
-}
-
-const Content = ({course}) =>{
-  return(
-    <>
-    <Part part={course.parts[0].name} exercises={course.parts[0].exercises} />
-    <Part part={course.parts[1].name} exercises={course.parts[1].exercises} />
-    <Part part={course.parts[2].name} exercises={course.parts[2].exercises} />
-    </>
-  )
-}
-
-const Total = ({course}) =>{
-  return(
-    <>
-    <p>Number of Exercises {course.parts[0].exercises+course.parts[1].exercises+course.parts[2].exercises}</p>
-    </>
-  )
+  
 }
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  }
+  const course = 'Half Stack application development'
+  const part1 = 'Fundamentals of React'
+  const exercises1 = 10
+  const part2 = 'Using props to pass data'
+  const exercises2 = 7
+  const part3 = 'State of a component'
+  const exercises3 = 14
   return (
     <div>
-      <Header course={course} />
-      <Content course={course}/>
-      <Total course={course}/>
+      <Header course ={course} />
+      <Content p1 ={part1} p2 ={part2} p3 = {part3} e1 ={exercises1} e2 = {exercises2} e3 ={exercises3} />
+      <Total e1 = {exercises1} e2 = {exercises2} e3 = {exercises3} />
     </div>
   )
 }
