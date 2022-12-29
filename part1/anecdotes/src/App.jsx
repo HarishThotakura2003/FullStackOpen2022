@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 
 const App = () => {
 
@@ -14,6 +14,7 @@ const App = () => {
 
   const [selected,setSelected] = useState(0);
   const [votes,setVotes] = useState(new Array(7).fill(0));
+  const [max,setMax] = useState(-1);
 
 
   const random = (length) =>{
@@ -26,12 +27,23 @@ const App = () => {
     setVotes(v);
   }
 
+  const handleMaxVotes = () => {
+    setMax(votes.indexOf(Math.max(...votes)));
+  }
+
+  useEffect(()=>{
+    handleMaxVotes();
+  })
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <button onClick={updateVotes}>vote</button>
       <button onClick ={() => {setSelected(random(anecdotes.length))}}>next anecdotes</button>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[max]}</p>
     </div>
   )
 }
