@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 
 const App = () => {
+
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -12,14 +13,24 @@ const App = () => {
   ]
 
   const [selected,setSelected] = useState(0);
+  const [votes,setVotes] = useState(new Array(7).fill(0));
+
 
   const random = (length) =>{
     return Math.floor(Math.random() * length);
   }
 
+  const updateVotes = () =>{
+    let v = [...votes];
+    v[selected]+=1;
+    setVotes(v);
+  }
+
   return (
     <div>
       <p>{anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
+      <button onClick={updateVotes}>vote</button>
       <button onClick ={() => {setSelected(random(anecdotes.length))}}>next anecdotes</button>
     </div>
   )
