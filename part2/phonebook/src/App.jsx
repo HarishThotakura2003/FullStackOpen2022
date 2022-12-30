@@ -1,26 +1,56 @@
 import React, { useState } from 'react'
 
+const Filter = ({ filter, handleFilterChange }) => {
+  return (
+    <d>
+      Filter shown with
+      <input value={filter} onChange={handleFilterChange} />
+    </d>
+  )
+}
+
+const PersonForm = ({ handleSubmit, newName, newNumber, handleNameChange, handleNumberChange }) => {
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>name :<input value={newName} onChange={handleNameChange} /></div>
+      <div>number :<input value={newNumber} onChange={handleNumberChange} /></div>
+      <button type='submit'>add</button>
+    </form>
+  )
+}
+
+const Persons =({displayPersons}) => {
+  return (
+    <>
+      {displayPersons.map(p => <p>{p.name} {p.number}</p>)}
+    </>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
-  const [displayPersons,setDisplayPersons] = useState(persons)
+  const [displayPersons, setDisplayPersons] = useState(persons)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [filter,setFilter] = useState('')
+  const [filter, setFilter] = useState('')
 
   const handleNameChange = (e) => {
     setNewName(e.target.value)
   }
 
-  const handleNumberChange =(e) =>{
+  const handleNumberChange = (e) => {
     setNewNumber(e.target.value)
   }
 
-  const handleFilterChange = (e) =>{
+  const handleFilterChange = (e) => {
+    console.log('working')
     setFilter(e.target.value)
-    const regex = new RegExp(filter,'i')
-    const filteredPersons = (persons.filter(p=>p.name.match(regex)))
+    const regex = new RegExp(filter, 'i')
+    const filteredPersons = (persons.filter(p => p.name.match(regex)))
     setDisplayPersons(filteredPersons)
-    if(filter==''){setDisplayPersons(persons)}
+    if (filter === '') { setDisplayPersons(persons) }
+
+
   }
 
   const handleSubmit = (e) => {
@@ -33,11 +63,11 @@ const App = () => {
       const newPerson = {
         id: persons.length + 1,
         name: newName,
-        number : newNumber,
+        number: newNumber,
       }
       setDisplayPersons(persons.concat(newPerson))
       setPersons(persons.concat(newPerson))
-      
+
     }
 
   }
@@ -45,15 +75,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <di>filter shown with <input value={filter} onChange={handleFilterChange}/></di>
-      <form onSubmit={handleSubmit}>
-        <div>name :<input value={newName} onChange={handleNameChange} /></div>
-        <div>number :<input value={newNumber} onChange={handleNumberChange} /></div>
-        <button type='submit'>add</button>
-      </form>
-
+      <Filter value={filter} handleFilterChange={handleFilterChange} />
+      <h3>Add a new</h3>
+      <PersonForm newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} handleSubmit={handleSubmit} />
       <h2>Numbers</h2>
-      {displayPersons.map(p => <p>{p.name} {p.number}</p>)}
+      <Persons displayPersons={displayPersons} />
     </div>
   )
 }
