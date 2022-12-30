@@ -12,20 +12,24 @@ const Part = (props) => {
     )
 }
 
-const Content = (props) => {
+const Content = ({course}) => {
     return (
         <>
-            {props.course.parts.map(p =>
+            {course.parts.map(p =>
                 <Part part={p} />
             )}
         </>
     )
 }
 
-const Total = (props) => {
+const Total = ({course}) => {
     return (
         <>
-            <p>Number of exercises {props.course.parts[0].exercises + props.course.parts[1].exercises + props.course.parts[2].exercises}</p>
+            <p>Number of exercises {
+                course.parts.reduce((s,p)=>{
+                    return s + p.exercises;
+                },0)
+            }</p>
         </>
     )
 }
