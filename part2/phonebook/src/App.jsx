@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {id: 1,name: 'Harish Thotakura',number:69696869 }
-  ])
+  const [persons, setPersons] = useState([])
+  const [displayPersons,setDisplayPersons] = useState(persons)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [filter,setFilter] = useState('')
 
   const handleNameChange = (e) => {
     setNewName(e.target.value)
@@ -13,6 +13,14 @@ const App = () => {
 
   const handleNumberChange =(e) =>{
     setNewNumber(e.target.value)
+  }
+
+  const handleFilterChange = (e) =>{
+    setFilter(e.target.value)
+    const regex = new RegExp(filter,'i')
+    const filteredPersons = (persons.filter(p=>p.name.match(regex)))
+    setDisplayPersons(filteredPersons)
+    if(filter==''){setDisplayPersons(persons)}
   }
 
   const handleSubmit = (e) => {
@@ -27,7 +35,9 @@ const App = () => {
         name: newName,
         number : newNumber,
       }
-      setPersons(persons.concat(newPerson));
+      setDisplayPersons(persons.concat(newPerson))
+      setPersons(persons.concat(newPerson))
+      
     }
 
   }
@@ -35,6 +45,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <di>filter shown with <input value={filter} onChange={handleFilterChange}/></di>
       <form onSubmit={handleSubmit}>
         <div>name :<input value={newName} onChange={handleNameChange} /></div>
         <div>number :<input value={newNumber} onChange={handleNumberChange} /></div>
@@ -42,7 +53,7 @@ const App = () => {
       </form>
 
       <h2>Numbers</h2>
-      {persons.map(p => <p>{p.name} {p.number}</p>)}
+      {displayPersons.map(p => <p>{p.name} {p.number}</p>)}
     </div>
   )
 }
