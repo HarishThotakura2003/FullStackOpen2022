@@ -28,7 +28,7 @@ const Persons =({displayPersons}) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([])
+  const [persons, setPersons] = useState([{name:'jharish'}])
   const [displayPersons, setDisplayPersons] = useState(persons)
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
@@ -43,14 +43,10 @@ const App = () => {
   }
 
   const handleFilterChange = (e) => {
-    console.log('working')
     setFilter(e.target.value)
-    const regex = new RegExp(filter, 'i')
-    const filteredPersons = (persons.filter(p => p.name.match(regex)))
+    const condition = new RegExp(filter)
+    const filteredPersons = (persons.filter(p => p.name.match(condition)))
     setDisplayPersons(filteredPersons)
-    if (filter === '') { setDisplayPersons(persons) }
-
-
   }
 
   const handleSubmit = (e) => {
@@ -67,19 +63,28 @@ const App = () => {
       }
       setDisplayPersons(persons.concat(newPerson))
       setPersons(persons.concat(newPerson))
-
     }
-
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter value={filter} handleFilterChange={handleFilterChange} />
+      <Filter
+        value={filter}
+        handleFilterChange={handleFilterChange} 
+      />
       <h3>Add a new</h3>
-      <PersonForm newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} handleSubmit={handleSubmit} />
+      <PersonForm 
+        newName={newName}
+        newNumber={newNumber}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        handleSubmit={handleSubmit} 
+        />
       <h2>Numbers</h2>
-      <Persons displayPersons={displayPersons} />
+      <Persons 
+        displayPersons={displayPersons}
+      />
     </div>
   )
 }
